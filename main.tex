@@ -1,0 +1,119 @@
+\definecolor{links}{HTML}{2A1B81}
+\hypersetup{colorlinks,linkcolor=,urlcolor=links}
+
+\usetheme{Boadilla}
+\usecolortheme{seahorse}
+\usefonttheme{serif}
+\beamertemplatenavigationsymbolsempty
+
+\setbeamertemplate{bibliography item}{\insertbiblabel}
+
+\usepackage{luacode}
+\usepackage{luatexja}
+\usepackage{pgfpages}
+\usepackage[osf]{mathpazo}
+
+\begin{luacode*}
+  USE_IPAFONT = os.getenv"USE_IPAFONT"
+  USE_YUFONT = os.getenv"USE_YUFONT"
+  
+  if USE_YUFONT == "true" then
+    tex.sprint("\\AtBeginDocument{\\usepackage[yu-osx, deluxe, expert]{luatexja-preset}}")
+  elseif USE_IPAFONT == "true" then
+    tex.sprint("\\AtBeginDocument{\\usepackage[ipaex, deluxe, expert]{luatexja-preset}}")
+  else
+    tex.sprint("\\AtBeginDocument{\\usepackage[hiragino-pro, deluxe, expert]{luatexja-preset}}")
+  end
+\end{luacode*}
+
+\usepackage{epigraph}
+\usepackage{etoolbox}
+\usepackage{tikz}
+\usepackage{framed}
+\usepackage{libertine}
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+
+%\setbeameroption{show notes on second screen=right}
+
+\setmainfont[Numbers=OldStyle, BoldFont=Palatino Bold]{Palatino}
+\setsansfont{CMU Sans Serif}
+\setmonofont{CMU Typewriter Text}
+
+\input{vc.tex}
+
+\title[\href{http://qiita.com/yyu/items/193cb9fd782d226f50fc}{Minimal Cake Pattern in Swift}]{%
+  \href{http://qiita.com/yyu/items/193cb9fd782d226f50fc}{Minimal Cake Pattern in Swift} \\
+  {\normalsize \href{http://kbkz.connpass.com/event/37480}{kbkz.tech \#11}}
+}
+\author{吉村 優}
+\date[September 25, 2016]{%
+  September 25, 2016 \\%
+  {\footnotesize (Commit ID: \GITAbrHash)}
+}
+\institute[\href{https://twitter.com/\_yyu\_}{@\_yyu\_}]{%
+  \url{https://twitter.com/\_yyu\_}\\
+  \url{http://qiita.com/yyu}\\
+  \url{https://github.com/y-yu}\\
+}
+
+\input{./lib/quotebox.tex}
+\input{./lib/footnotemark.tex}
+\input{./lib/ballon.tex}
+
+\newcommand\ballref[1]{%
+\tikz \node[circle, shade,ball color=structure.fg,inner sep=0pt,%
+  text width=8pt,font=\tiny,align=center] {\color{white}\ref{#1}};
+}
+
+\begin{document}
+
+\frame{\maketitle}
+
+\section{自己紹介}
+\begin{frame}
+  \frametitle{自己紹介}
+  
+  \begin{columns}
+    \begin{column}{0.3\textwidth}
+      \centering
+      \begin{figure}
+        \includegraphics[width=0.95\textwidth]{img/bird2x.png}
+      \end{figure}
+    \end{column}
+    \begin{column}{0.7\textwidth}
+      \begin{itemize}
+        \item<2-> Scalaを書く仕事に従事
+        \item<3-> 趣味は\LaTeX と暗号技術
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\section*{参考文献}
+\begin{frame}
+  \frametitle{参考文献}
+
+  \bibliographystyle{junsrt_url}
+  \nocite{*}
+  \bibliography{ref}
+\end{frame}
+
+\begin{frame}
+  \frametitle{目次}
+
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+\begin{frame}
+  \centering
+  {\Huge Thank you for listening!}
+
+  \quad \quad
+
+  {\Huge Any question?}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,51 @@
+os:
+  - osx
+cache:
+  directories:
+    - "$HOME/Library/texlive/2016basic/texmf-var/luatex-cache"
+before_install:
+  - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/install-tex.sh
+  - wget https://raw.githubusercontent.com/y-yu/install-tex-travis/master/tlmgr.sh
+  - chmod +x install-tex.sh tlmgr.sh
+install:
+  - . ./install-tex.sh
+  - ./tlmgr.sh update --self --all
+  - ./tlmgr.sh install latexmk collection-luatex collection-langjapanese collection-fontsrecommended filehook type1cm epigraph framed libertine cm-unicode
+before_script:
+  - sudo mkdir -p /usr/local/texlive/2016basic/texmf-local/fonts/opentype/public/hiragino/
+  - cd /usr/local/texlive/2016basic/texmf-local/fonts/opentype/public/hiragino/
+  - sudo ln -s "/Library/Fonts/ヒラギノ明朝 Pro W3.otf" HiraMinPro-W3.otf
+  - sudo ln -s "/Library/Fonts/ヒラギノ明朝 Pro W6.otf" HiraMinPro-W6.otf
+  - sudo ln -s "/Library/Fonts/ヒラギノ角ゴ Pro W3.otf" HiraKakuPro-W3.otf
+  - sudo ln -s "/Library/Fonts/ヒラギノ角ゴ Pro W6.otf" HiraKakuPro-W6.otf
+  - sudo ln -s "/Library/Fonts/ヒラギノ角ゴ Std W8.otf" HiraKakuStd-W8.otf
+  - sudo ln -s "/Library/Fonts/ヒラギノ丸ゴ Pro W4.otf" HiraMaruPro-W4.otf
+  - sudo ln -s "/System/Library/Fonts/ヒラギノ明朝 ProN W3.otf" HiraMinProN-W3.otf
+  - sudo ln -s "/System/Library/Fonts/ヒラギノ明朝 ProN W6.otf" HiraMinProN-W6.otf
+  - sudo ln -s "/System/Library/Fonts/ヒラギノ角ゴ ProN W3.otf" HiraKakuProN-W3.otf
+  - sudo ln -s "/System/Library/Fonts/ヒラギノ角ゴ ProN W6.otf" HiraKakuProN-W6.otf
+  - sudo ln -s "/Library/Fonts/ヒラギノ角ゴ StdN W8.otf" HiraKakuStdN-W8.otf
+  - sudo ln -s "/Library/Fonts/ヒラギノ丸ゴ ProN W4.otf" HiraMaruProN-W4.otf
+  - sudo mktexlsr
+  - cd -
+  - sudo fmtutil-sys --byfmt lualatex
+script:
+  - make all
+after_success:
+  - echo -e "Host github.com\n\tStrictHostKeyChecking no\nIdentityFile ~/.ssh/deploy.key\n" >> ~/.ssh/config
+  - openssl aes-256-cbc -k "$SERVER_KEY" -in deploy_key.enc -d -a -out deploy.key
+  - cp deploy.key ~/.ssh/
+  - chmod 600 ~/.ssh/deploy.key
+  - git config --global user.email "m@yyu.pw"
+  - git config --global user.name "Yoshimura Yuu"
+  - git fetch origin gh-pages:gh-pages
+  - git stash -a
+  - git checkout gh-pages
+  - rm mcp_swift.pdf mcp_swift_without_animation.pdf
+  - git stash pop
+  - git add mcp_swift.pdf mcp_swift_without_animation.pdf
+  - git commit -a -m "auto commit on travis $TRAVIS_JOB_NUMBER $TRAVIS_COMMIT"
+  - git push git@github.com:y-yu/minimal-cake-pattern-swift-slide.git gh-pages:gh-pages
+env:
+  global:
+    secure: eJQB08WkSVpVySMquXmxqMTgiN+ypotwTVEOb0aEH8bpf55PucqaXhizzK8wSy+kJW3khuqCBMtOQ/drN3Kl77yGjFRE8Fm9MUb68+tNPRyze+I0e2Az1CyLOZdF7DT5U6xC1xGFtTtQTTGHlC1nTmu2A9G/dT2zq6xGkxSdvk9EBMADFsWNqu22ps8JqmqnHCFYk2NCzFpHWxIgODVIVolUxk0ywMrqDJ5ykbXKupABFpSC0bSPQIm5N+wkjKyuYkdKskETPQlMjWv22etQPKtBrqkkHhovfACRC7RM+Ma8gSiGA1rf7UqqcwvwwUvY7TyPNysy4eKrzGoTlJyu5GamYVMpR4BsQo02nU4oZQ7x/fgMRDrfuGEq5mseAJR/pLebpYetG4gNDL2Z+2/IyynPCT4KxOcSyc9zTLixMIrka7nWbfZ9+R8k8lNg4Ye2dr2ERTqSkZkuz4Xj10rYfdSS57D7i6bFdmp+xPHeQzbstjQXJBqsDLla1F75UOx19yq7xgsxL+TgeYvbDGQF4UugL5emt1sFoiyAiOzWCEF71FhBd1pYslVlQUo+TKYQeS6hd2yr5iaunFgNQR2Lk2X/NwJi22kqi791bOoRVTaWc3f2QyB3OBZEiib73HsX2dTKt1cMT0Owa9mv37fxNuJnf205lrsHsGUMyAwd8+A=
