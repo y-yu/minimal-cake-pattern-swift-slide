@@ -1,12 +1,12 @@
-公平なガチャシステム
+Minimal Cake Pattern in Swift
 ============================
 
-[![Build Status](https://travis-ci.org/y-yu/fair-gacha-slide.svg?branch=master)](https://travis-ci.org/y-yu/fair-gacha-slide)
+[![Build Status](https://travis-ci.org/y-yu/minimal-cake-pattern-swift-slide.svg?branch=master)](https://travis-ci.org/y-yu/minimal-cake-pattern-swift-slide)
 
 ## 成果物
 
-- [fair_gacha.pdf](https://y-yu.github.io/fair-gacha-slide/fair_gacha.pdf)
-- [fair_gacha_without_animation.pdf](https://y-yu.github.io/fair-gacha-slide/fair_gacha_without_animation.pdf)
+- [mcp_swift.pdf](https://y-yu.github.io/minimal-cake-pattern-swift-slide/mcp_swift.pdf)
+- [mcp_swift_without_animation.pdf](https://y-yu.github.io/minimal-cake-pattern-swift-slide/mcp_swift_without_animation.pdf)
 
 ## コンパイル
 
