@@ -33,6 +33,7 @@
 \usepackage{libertine}
 \usepackage{amsmath}
 \usepackage{mathtools}
+\usepackage{listings}
 
 \renewcommand{\kanjifamilydefault}{\gtdefault}
 
@@ -62,6 +63,7 @@
 \input{./lib/quotebox.tex}
 \input{./lib/footnotemark.tex}
 \input{./lib/ballon.tex}
+\input{./lib/listings.tex}
 
 \newcommand\ballref[1]{%
 \tikz \node[circle, shade,ball color=structure.fg,inner sep=0pt,%
@@ -87,9 +89,312 @@
       \begin{itemize}
         \item<2-> Scalaを書く仕事に従事
         \item<3-> 趣味は\LaTeX と暗号技術
+        \item<4-> Swiftは最近はじめた初心者 
       \end{itemize}
     \end{column}
   \end{columns}
+\end{frame}
+
+\section{Dependency Injectionとそのメリット}
+
+\begin{frame}
+  \frametitle{DI（Dependency Injection）とは？}
+
+  \pause
+
+  \begin{exampleblock}{Dependency Injectionとは？}
+    \begin{shadequote}[r]{\scriptsize Scalaにおける最適なDependency Injectionの方法を考察する\cite{scala-mcp}}
+      \begin{itemize}
+        \item Dependencyとは実際にサービスなどで使われるオブジェクトである
+        \item InjectionとはDependencyオブジェクトを使うオブジェクトに渡すことである
+      \end{itemize}
+    \end{shadequote}
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}
+  \frametitle{DIのメリット}
+
+  \begin{block}{メリット}
+    \begin{shadequote}[r]{\scriptsize Scalaにおける最適なDependency Injectionの方法を考察する\cite{scala-mcp}}
+      \begin{itemize}
+        \item<2-> コンポーネント同士が疎結合になる
+        \item<3-> クライアントの動作がカスタマイズ可能になる
+        \item<4-> 依存オブジェクトのモック化によるユニットテストが可能になる
+      \end{itemize}
+    \end{shadequote}
+  \end{block}
+
+  \begin{center}
+    \uncover<5->{
+      \begin{tikzpicture}
+        \calloutquote[width=5cm,position={(0.7,-0.2)},fill=blue!30,rounded corners]{どうやってやるの？}
+      \end{tikzpicture}
+    }
+  \end{center}
+\end{frame}
+
+\section{Swiftにおける代表的なDI手法}
+
+\begin{frame}
+  \frametitle{Swiftにおける代表的なDI手法}
+
+  \pause
+
+  \begin{exampleblock}{Swiftにおける代表的なDI手法}
+    \begin{shadequote}[r]{\scriptsize Dependency Injection in Swift 2.x\cite{di-swift2}}
+      \begin{itemize}
+        \item<3-> \href{https://github.com/Swinject/Swinject}{Swinject}を用いた動的なDI
+        \item<4-> Cake Patternを用いた静的なDI
+      \end{itemize}
+    \end{shadequote}
+  \end{exampleblock}
+
+  \begin{center}
+    \uncover<5->{
+      \begin{tikzpicture}
+        \calloutquote[width=5cm,position={(0.7,-0.2)},fill=green!30,rounded corners]{これら以外にはないの？}
+      \end{tikzpicture}
+    }
+
+    \uncover<6->{
+      \begin{tikzpicture}
+        \calloutquote[width=6cm,position={(-0.7,-0.2)},fill=red!30,rounded corners]{Cake Patternの仲間を紹介！}
+      \end{tikzpicture}
+    }
+  \end{center}
+\end{frame}
+
+\section{Example}
+
+\begin{frame}
+  \frametitle{例題}
+
+  こんな機能を作りたい
+
+  \pause
+
+  \begin{exampleblock}{\texttt{HashPasswordService}}
+    パスワードを鍵付きハッシュ関数\footnote[frame]{ソルトを使ったハッシュ関数のこと}%
+    でハッシュ化して表示する機能
+  \end{exampleblock}
+
+  \pause
+
+  \begin{block}{必要な機能}
+    \begin{itemize}
+      \item<4-> 設定ファイルを読み込む機能
+      \item<5-> パスワードをハッシュ化する機能
+    \end{itemize}
+  \end{block}
+
+  \begin{center}
+    \uncover<6->{
+      \begin{tikzpicture}
+        \calloutquote[width=5cm,position={(0.7,-0.2)},fill=green!30,rounded corners]{機能ごとに考えていこう！}
+      \end{tikzpicture}
+    }
+  \end{center}
+\end{frame}
+
+\subsection{設定ファイルを読み込む機能}
+
+\begin{frame}
+  \frametitle{設定ファイルを読み込む機能}
+
+  \begin{block}{考えること}
+    \begin{itemize}
+      \item<2-> ソルトをハードコードするのは微妙
+      \item<3-> ソルトは設定ファイルに保存する
+      \item<4-> 一方、テストの時はファイルから読み込みたくない
+        \begin{center}
+          \uncover<5->{
+            \begin{tikzpicture}
+              \calloutquote[width=9cm,position={(0.7,-0.2)},fill=red!30,rounded corners]{ファイルIOに失敗したらテストが失敗する！}
+            \end{tikzpicture}
+          }
+        \end{center}
+      \item<6-> 本実装はソルトを設定ファイルから読み込んで、
+        テストの時はハードコードしたソルトを使う
+        \begin{center}
+          \uncover<7->{
+            \begin{tikzpicture}
+              \calloutquote[width=5cm,position={(-0.7,-0.2)},fill=green!30,rounded corners]{二つの実装が必要}
+            \end{tikzpicture}
+          }
+        \end{center}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{設定ファイルを読み込む機能}
+
+  まずは設定ファイルを読み込む部分をつくる
+  \begin{enumerate}
+    \item<2-> インターフェースを作成
+      \lstinputlisting[style=swift, firstline=3, lastline=7]{src/MCPExample/ReadConfigService.swift}
+    \item<3-> 実装を投入
+      \lstinputlisting[style=swift, firstline=9, lastline=17]{src/MCPExample/ReadConfigService.swift}
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{設定ファイルを読み込む機能}
+
+  \begin{enumerate}
+    \setcounter{enumi}{3}
+    \item<1-> メイン実装を作成
+      \lstinputlisting[style=swift, firstline=23, lastline=34]{src/MCPExample/ReadConfigService.swift}
+  \end{enumerate}
+
+  \begin{center}
+    \uncover<2->{
+      \begin{tikzpicture}
+        \calloutquote[width=12cm,position={(-0.7,-0.2)},fill=blue!30,rounded corners]{設定ファイルのパスを受け取って、ファイルをオープンしてソルトを読み込む}
+      \end{tikzpicture}
+    }
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{設定ファイルを読み込む機能}
+
+  \begin{enumerate}
+    \setcounter{enumi}{4}
+    \item<1-> モックの実装を作成
+      \lstinputlisting[style=swift, firstline=36, lastline=47]{src/MCPExample/ReadConfigService.swift}
+  \end{enumerate}
+
+  \begin{center}
+    \uncover<2->{
+      \begin{tikzpicture}
+        \calloutquote[width=11cm,position={(-0.7,-0.2)},fill=green!30,rounded corners]{設定ファイルのパスはダミー、ソルトも引数で与えられたダミー値を必ず返す}
+      \end{tikzpicture}
+    }
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{設定ファイルを読み込む機能}
+
+  \begin{enumerate}
+    \setcounter{enumi}{5}
+    \item<1-> サービスのインターフェースを作成
+      \lstinputlisting[style=swift, firstline=19, lastline=21]{src/MCPExample/ReadConfigService.swift}
+  \end{enumerate}
+
+  \begin{center}
+    \uncover<2->{
+      \begin{tikzpicture}
+        \calloutquote[width=4cm,position={(-0.7,-0.2)},fill=blue!30,rounded corners]{あとで使います}
+      \end{tikzpicture}
+    }
+  \end{center}
+\end{frame}
+
+\subsection{パスワードをハッシュ化する機能}
+
+\begin{frame}
+  \frametitle{パスワードをハッシュ化する機能}
+
+  次に、パスワードをハッシュ化する部分を作成
+  \begin{enumerate}
+    \item<2-> インターフェースを作成
+      \lstinputlisting[style=swift, firstline=3, lastline=5]{src/MCPExample/HashPasswordService.swift}
+      \begin{center}
+        \uncover<3->{
+          \begin{tikzpicture}
+            \calloutquote[width=10cm,position={(-0.7,-0.2)},fill=green!30,rounded corners]{\texttt{ReadConfigService}のインターフェースを入れる}
+          \end{tikzpicture}
+        }
+      \end{center}
+
+    \item<4-> 実装を投入
+      \lstinputlisting[style=swift, firstline=7, lastline=13]{src/MCPExample/HashPasswordService.swift}
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{パスワードをハッシュ化する機能}
+
+  \begin{enumerate}
+    \item<1-> メイン実装を作成
+      \lstinputlisting[style=swift, firstline=19, lastline=25]{src/MCPExample/HashPasswordService.swift}
+      \begin{center}
+        \uncover<2->{
+          \begin{tikzpicture}
+            \calloutquote[width=8cm,position={(0.7,-0.2)},fill=green!30,rounded corners]{\texttt{ReadConfigService}はメインの実装をDI}
+          \end{tikzpicture}
+        }
+      \end{center}
+
+    \item<3-> テスト実装を作成
+      \lstinputlisting[style=swift, firstline=27, lastline=30]{src/MCPExample/HashPasswordService.swift}
+      \begin{center}
+        \uncover<4->{
+          \begin{tikzpicture}
+            \calloutquote[width=7cm,position={(-0.7,-0.2)},fill=cyan!30,rounded corners]{\texttt{ReadConfigService}はモックをDI}
+          \end{tikzpicture}
+        }
+      \end{center}
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \frametitle{パスワードをハッシュ化する機能}
+
+  \begin{enumerate}
+    \setcounter{enumi}{10}
+    \item<1-> モックも作成
+      \lstinputlisting[style=swift, firstline=32, lastline=38]{src/MCPExample/HashPasswordService.swift}
+      \begin{center}
+        \uncover<2->{
+          \begin{tikzpicture}
+            \calloutquote[width=7cm,position={(0.7,-0.2)},fill=blue!30,rounded corners]{モックはハッシュ値を計算しない}
+          \end{tikzpicture}
+        }
+      \end{center}
+  \end{enumerate}
+\end{frame}
+
+\subsection{テスト}
+
+\begin{frame}
+  \frametitle{テスト}
+
+  作成した\texttt{HashPasswordService}のテストを作る
+  \uncover<2-> {
+    \lstinputlisting[style=swift]{src/MCPExampleTests/HashPasswordServiceTest.swift}
+  }
+  
+  \begin{center}
+    \uncover<3->{
+      \begin{tikzpicture}
+        \calloutquote[width=5cm,position={(0.7,-0.2)},fill=green!30,rounded corners]{設定ファイルを読まない！}
+      \end{tikzpicture}
+    }
+  \end{center}
+\end{frame}
+
+\section{まとめ}
+
+\begin{frame}
+  \frametitle{まとめ}
+  
+  \begin{block}{Minimal Cake Patternのメリット}
+    \begin{itemize}
+      \item<2-> コンパイラーによる静的なチェックにより、DI漏れを検出できる
+      \item<3-> DIのための特別なものが必要ない
+      \item<4-> 普通のCake Patternに比べてシンプルである
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{目次}
+
+  \tableofcontents
 \end{frame}
 
 \section*{参考文献}
@@ -99,12 +404,6 @@
   \bibliographystyle{junsrt_url}
   \nocite{*}
   \bibliography{ref}
-\end{frame}
-
-\begin{frame}
-  \frametitle{目次}
-
-  \tableofcontents[hideallsubsections]
 \end{frame}
 
 \begin{frame}
