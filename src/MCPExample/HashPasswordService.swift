@@ -16,23 +16,29 @@ protocol UsesHashPasswordService {
   var hashPasswordService: HashPasswordService { get }
 }
 
-class MixInHashPasswordSerivce: HashPasswordService {
+class HashPasswordSerivceImpl: HashPasswordService {
   let readConfigService: ReadConfigService
   
   init(_ configFile: String) {
-    readConfigService = MixInReadConfigService(configFile)
+    readConfigService = ReadConfigServiceImpl(configFile)
   }
 }
 
-class MixInTestHashPasswordService: HashPasswordService {
+class HashPasswordServiceTestImpl: HashPasswordService {
   var readConfigService: ReadConfigService =
-    MixInMockReadConfigService("dummySalt")
+    ReadConfigServiceMockImpl("dummySalt")
 }
 
-class MixInMockHashPasswordService: HashPasswordService {
-  var readConfigService: ReadConfigService = MixInMockReadConfigService("dummySalt")
+class HashPasswordServiceMockImpl: HashPasswordService {
+  var readConfigService: ReadConfigService = ReadConfigServiceMockImpl("dummySalt")
   
   func hashBySha1(password: String) -> String {
     return password + "_dummySalt"
   }
+}
+
+class HashPasswordServiceNgImpl: HashPasswordService {
+    func hashBySha1(password: String) -> String {
+        return "ng"
+    }
 }

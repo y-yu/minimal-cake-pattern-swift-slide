@@ -159,7 +159,7 @@
 
     \uncover<6->{
       \begin{tikzpicture}
-        \calloutquote[width=6cm,position={(-0.7,-0.2)},fill=red!30,rounded corners]{Cake Patternの仲間を紹介！}
+        \calloutquote[width=6cm,position={(-0.7,-0.2)},fill=cyan!30,rounded corners]{Cake Patternの仲間を紹介！}
       \end{tikzpicture}
     }
   \end{center}
@@ -168,7 +168,7 @@
 \section{Example}
 
 \begin{frame}
-  \frametitle{例題}
+  \frametitle{Example}
 
   こんな機能を作りたい
 
@@ -232,7 +232,7 @@
 
   まずは設定ファイルを読み込む部分をつくる
   \begin{enumerate}
-    \item<2-> インターフェースを作成
+    \item<2-> インターフェース\lstinline|ReadConfigService|を作成
       \lstinputlisting[style=swift, firstline=3, lastline=7]{src/MCPExample/ReadConfigService.swift}
     \item<3-> 実装を投入
       \lstinputlisting[style=swift, firstline=9, lastline=17]{src/MCPExample/ReadConfigService.swift}
@@ -244,14 +244,14 @@
 
   \begin{enumerate}
     \setcounter{enumi}{3}
-    \item<1-> メイン実装を作成
+    \item<1-> メイン実装を\lstinline|ReadConfigServiceImpl|を作成
       \lstinputlisting[style=swift, firstline=23, lastline=34]{src/MCPExample/ReadConfigService.swift}
   \end{enumerate}
 
   \begin{center}
     \uncover<2->{
       \begin{tikzpicture}
-        \calloutquote[width=12cm,position={(-0.7,-0.2)},fill=blue!30,rounded corners]{設定ファイルのパスを受け取って、ファイルをオープンしてソルトを読み込む}
+        \calloutquote[width=11cm,position={(-0.7,-0.2)},fill=blue!30,rounded corners]{設定ファイルのパスを引数で受け取って、ファイルをオープンしてソルトを読み込む}
       \end{tikzpicture}
     }
   \end{center}
@@ -262,14 +262,20 @@
 
   \begin{enumerate}
     \setcounter{enumi}{4}
-    \item<1-> モックの実装を作成
+    \item<1-> モック実装\lstinline|ReadConfigServiceMockImpl|を作成
       \lstinputlisting[style=swift, firstline=36, lastline=47]{src/MCPExample/ReadConfigService.swift}
   \end{enumerate}
 
   \begin{center}
     \uncover<2->{
       \begin{tikzpicture}
-        \calloutquote[width=11cm,position={(-0.7,-0.2)},fill=green!30,rounded corners]{設定ファイルのパスはダミー、ソルトも引数で与えられたダミー値を必ず返す}
+        \calloutquote[width=11cm,position={(0.7,-0.2)},fill=green!30,rounded corners]{設定ファイルのパスはダミー、ソルトもコンストラクタの引数で与えられた値を必ず返す}
+      \end{tikzpicture}
+    }
+
+    \uncover<3->{
+      \begin{tikzpicture}
+        \calloutquote[width=9cm,position={(-0.7,-0.2)},fill=red!30,rounded corners]{つまり、設定ファイルにはアクセスしない！}
       \end{tikzpicture}
     }
   \end{center}
@@ -280,7 +286,7 @@
 
   \begin{enumerate}
     \setcounter{enumi}{5}
-    \item<1-> サービスのインターフェースを作成
+    \item<1-> サービスへの依存を示すインターフェース\lstinline|UsesReadConfigService|を作成
       \lstinputlisting[style=swift, firstline=19, lastline=21]{src/MCPExample/ReadConfigService.swift}
   \end{enumerate}
 
@@ -305,7 +311,7 @@
       \begin{center}
         \uncover<3->{
           \begin{tikzpicture}
-            \calloutquote[width=10cm,position={(-0.7,-0.2)},fill=green!30,rounded corners]{\texttt{ReadConfigService}のインターフェースを入れる}
+            \calloutquote[width=10cm,position={(-0.7,-0.2)},fill=green!30,rounded corners]{\lstinline|ReadConfigService|に依存することを示す}
           \end{tikzpicture}
         }
       \end{center}
@@ -324,7 +330,7 @@
       \begin{center}
         \uncover<2->{
           \begin{tikzpicture}
-            \calloutquote[width=8cm,position={(0.7,-0.2)},fill=green!30,rounded corners]{\texttt{ReadConfigService}はメインの実装をDI}
+            \calloutquote[width=8cm,position={(0.7,-0.2)},fill=green!30,rounded corners]{\lstinline|ReadConfigService|のメイン実装をDI}
           \end{tikzpicture}
         }
       \end{center}
@@ -334,7 +340,7 @@
       \begin{center}
         \uncover<4->{
           \begin{tikzpicture}
-            \calloutquote[width=7cm,position={(-0.7,-0.2)},fill=cyan!30,rounded corners]{\texttt{ReadConfigService}はモックをDI}
+            \calloutquote[width=8cm,position={(-0.7,-0.2)},fill=cyan!30,rounded corners]{\lstinline|ReadConfigService|のモック実装をDI}
           \end{tikzpicture}
         }
       \end{center}
@@ -352,6 +358,12 @@
         \uncover<2->{
           \begin{tikzpicture}
             \calloutquote[width=7cm,position={(0.7,-0.2)},fill=blue!30,rounded corners]{モックはハッシュ値を計算しない}
+          \end{tikzpicture}
+        }
+
+        \uncover<3->{
+          \begin{tikzpicture}
+            \calloutquote[width=11cm,position={(-0.7,-0.2)},fill=green!30,rounded corners]{たとえこのサービスの実装が変更されても、依存するサービスのテストは落ちない}
           \end{tikzpicture}
         }
       \end{center}
@@ -377,6 +389,34 @@
   \end{center}
 \end{frame}
 
+\subsection{DIの漏れ}
+
+\begin{frame}[fragile]
+  \frametitle{DIの漏れ}
+
+  \pause
+
+  プログラマのミスで次のようにDIを忘れることがある
+  \lstinputlisting[style=swift, firstline=40, lastline=44]{src/MCPExample/HashPasswordService.swift}
+
+  \pause
+
+  \begin{alertblock}{コンパイルエラー}
+\begin{lstlisting}[basicstyle=\listingfont\scriptsize]
+HashPasswordService.swift:41:7: Type 'HashPasswordServiceNgImpl'
+does not conform to protocol 'UsesReadConfigService'
+\end{lstlisting}
+  \end{alertblock}
+
+  \pause
+
+  \begin{center}
+    \begin{tikzpicture}
+      \calloutquote[width=5cm,position={(-0.7,-0.2)},fill=cyan!30,rounded corners]{実行前にDI漏れを検出！}
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
 \section{まとめ}
 
 \begin{frame}
@@ -384,8 +424,8 @@
   
   \begin{block}{Minimal Cake Patternのメリット}
     \begin{itemize}
-      \item<2-> コンパイラーによる静的なチェックにより、DI漏れを検出できる
-      \item<3-> DIのための特別なものが必要ない
+      \item<2-> コンパイラによる静的なチェックにより、DI漏れを検出できる
+      \item<3-> DIのための特別なライブラリが必要ない
       \item<4-> 普通のCake Patternに比べてシンプルである
     \end{itemize}
   \end{block}

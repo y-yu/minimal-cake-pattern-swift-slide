@@ -9,7 +9,7 @@ protocol ReadConfigService {
 extension ReadConfigService {
   private func readFile() -> Optional<String> {
     if ファイルをオープンする {
-       return Optional.Some(ファイルの中身)
+      return Optional.Some(ファイルの中身)
     } else {
       return Optional.None
     }
@@ -20,7 +20,7 @@ protocol UsesReadConfigService {
   var readConfigService: ReadConfigService { get }
 }
 
-class MixInReadConfigService: ReadConfigService {
+class ReadConfigServiceImpl: ReadConfigService {
   let configName: String
   
   init(_ str: String) {
@@ -33,7 +33,7 @@ class MixInReadConfigService: ReadConfigService {
   }
 }
 
-class MixInMockReadConfigService: ReadConfigService {
+class ReadConfigServiceMockImpl: ReadConfigService {
   var configName: String = "dummy"
   let dummySalt: String
   
