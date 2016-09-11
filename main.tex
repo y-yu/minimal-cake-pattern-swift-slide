@@ -79,13 +79,13 @@
   \frametitle{自己紹介}
   
   \begin{columns}
-    \begin{column}{0.3\textwidth}
+    \begin{column}{0.35\textwidth}
       \centering
       \begin{figure}
         \includegraphics[width=0.95\textwidth]{img/bird2x.png}
       \end{figure}
     \end{column}
-    \begin{column}{0.7\textwidth}
+    \begin{column}{0.65\textwidth}
       \begin{itemize}
         \item<2-> Scalaを書く仕事に従事
         \item<3-> 趣味は\LaTeX と暗号技術
@@ -95,7 +95,7 @@
   \end{columns}
 \end{frame}
 
-\section{Dependency Injectionとそのメリット}
+\section{Dependency Injectionとは？}
 
 \begin{frame}
   \frametitle{DI（Dependency Injection）とは？}
@@ -112,21 +112,25 @@
   \end{exampleblock}
 \end{frame}
 
+\section{DIのメリット}
+
 \begin{frame}
   \frametitle{DIのメリット}
+
+  \pause
 
   \begin{block}{メリット}
     \begin{shadequote}[r]{\scriptsize Scalaにおける最適なDependency Injectionの方法を考察する\cite{scala-mcp}}
       \begin{itemize}
-        \item<2-> コンポーネント同士が疎結合になる
-        \item<3-> クライアントの動作がカスタマイズ可能になる
-        \item<4-> 依存オブジェクトのモック化によるユニットテストが可能になる
+        \item<3-> コンポーネント同士が疎結合になる
+        \item<4-> クライアントの動作がカスタマイズ可能になる
+        \item<5-> 依存オブジェクトのモック化によるユニットテストが可能になる
       \end{itemize}
     \end{shadequote}
   \end{block}
 
   \begin{center}
-    \uncover<5->{
+    \uncover<6->{
       \begin{tikzpicture}
         \calloutquote[width=5cm,position={(0.7,-0.2)},fill=blue!30,rounded corners]{どうやってやるの？}
       \end{tikzpicture}
@@ -159,7 +163,7 @@
 
     \uncover<6->{
       \begin{tikzpicture}
-        \calloutquote[width=6cm,position={(-0.7,-0.2)},fill=cyan!30,rounded corners]{Cake Patternの仲間を紹介！}
+        \calloutquote[width=11cm,position={(-0.7,-0.2)},fill=cyan!30,rounded corners]{Cake Patternの仲間``Minimal Cake Pattern''を紹介！}
       \end{tikzpicture}
     }
   \end{center}
@@ -190,7 +194,7 @@
   \begin{center}
     \uncover<6->{
       \begin{tikzpicture}
-        \calloutquote[width=5cm,position={(0.7,-0.2)},fill=green!30,rounded corners]{機能ごとに考えていこう！}
+        \calloutquote[width=8cm,position={(0.7,-0.2)},fill=blue!30,rounded corners]{設定ファイルを読み込むのはなぜ？}
       \end{tikzpicture}
     }
   \end{center}
@@ -286,7 +290,7 @@
 
   \begin{enumerate}
     \setcounter{enumi}{5}
-    \item<1-> サービスへの依存を示すインターフェース\lstinline|UsesReadConfigService|を作成
+    \item<1-> 依存を示すインターフェース\lstinline|UsesReadConfigService|を作成
       \lstinputlisting[style=swift, firstline=19, lastline=21]{src/MCPExample/ReadConfigService.swift}
   \end{enumerate}
 
@@ -414,6 +418,44 @@ does not conform to protocol 'UsesReadConfigService'
     \begin{tikzpicture}
       \calloutquote[width=5cm,position={(-0.7,-0.2)},fill=cyan!30,rounded corners]{実行前にDI漏れを検出！}
     \end{tikzpicture}
+
+    \pause
+
+    \begin{tikzpicture}
+      \calloutquote[width=5cm,position={(0.7,-0.2)},fill=green!30,rounded corners]{依存が増えると効果的！}
+    \end{tikzpicture}
+  \end{center}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{DIの漏れ}
+
+  次のように依存が増えていくと、DI漏れがありえてくる
+\begin{lstlisting}[style=swift]
+protocol CreateUserService: 
+  UsesSessionService,
+  UsesUserRepository,
+  UsesClock,
+  UsesApplicationLogger,
+  UsesUserConfig,
+  UsesRandomGenerator {
+
+  func create(user: User) -> Future<Session>
+}
+\end{lstlisting}
+
+  \pause
+
+  \begin{center}
+    \begin{tikzpicture}
+      \calloutquote[width=9cm,position={(0.7,-0.2)},fill=red!30,rounded corners]{大きなアプリケーションを起動させるのは大変！}
+    \end{tikzpicture}
+
+    \pause
+    
+    \begin{tikzpicture}
+      \calloutquote[width=10cm,position={(-0.7,-0.2)},fill=green!30,rounded corners]{起動させなくてもDI漏れが検出できるのは便利！}
+    \end{tikzpicture}
   \end{center}
 \end{frame}
 
@@ -438,6 +480,7 @@ does not conform to protocol 'UsesReadConfigService'
 \end{frame}
 
 \section*{参考文献}
+
 \begin{frame}
   \frametitle{参考文献}
 
@@ -447,12 +490,13 @@ does not conform to protocol 'UsesReadConfigService'
 \end{frame}
 
 \begin{frame}
-  \centering
-  {\Huge Thank you for listening!}
+  \begin{center}
+    {\Huge Thank you for listening!}
 
-  \quad \quad
+    \quad \quad
 
-  {\Huge Any question?}
+    {\Huge Any question?}
+  \end{center}
 \end{frame}
 
 \end{document}
